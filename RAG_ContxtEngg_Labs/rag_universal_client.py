@@ -73,7 +73,7 @@ def get_llm_config() -> Dict[str, Any]:
     return {
         "anthropic_key_configured": bool(key),
         "anthropic_key_masked": f"{key[:8]}...{key[-4:]}" if key else "NOT_CONFIGURED",
-        "anthropic_model": os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
+        "anthropic_model": os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5-gama"),
         "ollama_base_url": os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
         "ollama_fast_model": os.environ.get("OLLAMA_FAST_MODEL", "llama3.2:1b"),
         "ollama_reasoning_model": os.environ.get("OLLAMA_REASONING_MODEL", "qwen3.8:27b"),
@@ -87,7 +87,7 @@ def get_rag_data_dir() -> Path:
     Returns the canonical, verified Path to data/sample_documents containing turbomachinery_manual.md.
     """
     candidates = [
-        Path(r"c:\Users\jadid\Desktop\MyWork\Techademy\UST\RAG_ContxtEngg_Labs\data\sample_documents"),
+        Path(r"C:\Users\Administrator\Desktop\AgenticAI\UST-AgenticAI\RAG_ContxtEngg_Labs\data\sample_documents"),
         Path(__file__).parent / "UST" / "RAG_ContxtEngg_Labs" / "data" / "sample_documents",
         Path(__file__).parent / "RAG_ContxtEngg_Labs" / "data" / "sample_documents",
         Path(__file__).parent / "data" / "sample_documents",
@@ -107,7 +107,7 @@ def get_rag_data_dir() -> Path:
                 return p.resolve()
         except Exception:
             pass
-    return Path(r"c:\Users\jadid\Desktop\MyWork\Techademy\UST\RAG_ContxtEngg_Labs\data\sample_documents")
+    return Path(r"C:\Users\Administrator\Desktop\AgenticAI\UST-AgenticAI\RAG_ContxtEngg_Labs\data\sample_documents")
 
 # ------------------------------------------------------------------------------
 # 3. REAL LLM GENERATION: ANTHROPIC PRIMARY WITH OLLAMA BACKUP (NO CANNED TEXT)
@@ -116,7 +116,7 @@ def call_rag_llm(
     prompt: str,
     system_prompt: str = "You are an enterprise AI assistant for UST Global (UST) & UST Global. Be technical, precise, and concise.",
     model: Optional[str] = None,
-    temperature: float = 0.2,
+    #temperature: float = 0.2,
     max_tokens: int = 1024,
     timeout: int = 40
 ) -> Dict[str, Any]:
@@ -133,7 +133,7 @@ def call_rag_llm(
     if anthropic_key:
         t0 = time.time()
         try:
-            url = "https://api.anthropic.com/v1/messages"
+            url = "https://llmproxy.ustrnd.com/v1/messages"
             headers = {
                 "x-api-key": anthropic_key,
                 "anthropic-version": "2023-06-01",
@@ -142,7 +142,7 @@ def call_rag_llm(
             body = {
                 "model": target_anthropic_model,
                 "max_tokens": max_tokens,
-                "temperature": temperature,
+                #"temperature": temperature,
                 "system": system_prompt,
                 "messages": [{"role": "user", "content": prompt}],
             }
@@ -236,7 +236,7 @@ def call_rag_vision(
     if anthropic_key:
         t0 = time.time()
         try:
-            url = "https://api.anthropic.com/v1/messages"
+            url = "https://llmproxy.ustrnd.com/v1/messages"
             headers = {
                 "x-api-key": anthropic_key,
                 "anthropic-version": "2023-06-01",
